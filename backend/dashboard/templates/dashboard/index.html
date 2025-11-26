@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <header>
+        <div>
+            <h2>لوحة القيادة</h2>
+            <p style="color: var(--gray-text);">نظرة عامة على تحليل البيانات</p>
+        </div>
+    </header>
+
+    <div class="stats-grid">
+        <div class="card">
+            <h3>{{ total_count }}</h3>
+            <p style="color: var(--gray-text);">إجمالي الاستفسارات المجمعة</p>
+        </div>
+        <div class="card">
+            <h3>{{ clusters.count }}</h3>
+            <p style="color: var(--gray-text);">عدد المواضيع (Clusters)</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>أبرز المشاكل المكتشفة</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>المشكلة</th>
+                    <th>التكرار</th>
+                    <th>المصدر</th>
+                    <th>الثقة</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in clusters %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.count }}</td>
+                    <td><span class="badge badge-blue">{{ item.source }}</span></td>
+                    <td>{{ item.confidence }}%</td>
+                    <td>
+                        <a href="{% url 'dashboard:generator' %}?id={{ item.id }}" class="action-btn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> توليد حل
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">لا توجد بيانات.. أضفها من لوحة الأدمن</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
